@@ -76,6 +76,35 @@ public class CacheTest {
         cache.put(uncacheableModel);
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void put_shouldAdjustEvictionOnTheFly_whenCachingStrategyIsChanged() throws IllegalAccessException {
+        ConcreteCachingStrategy<ConcreteModel, Long> primaryCachingStrategy = (ConcreteCachingStrategy<ConcreteModel, Long>) Mockito.mock(ConcreteCachingStrategy.class);
+        CachingStrategy<ConcreteModel, Long> secondaryCachingStrategy = (CachingStrategy<ConcreteModel, Long>) Mockito.mock(CachingStrategy.class);
+
+        Cache<ConcreteModel, Long> cache = new Cache<>(primaryCachingStrategy, 1, long.class);
+        ConcreteModel firstConcreteModel = new ConcreteModel(1L, "First Concrete Model");
+        ConcreteModel secondConcreteModel = new ConcreteModel(2L, "Second Concrete Model");
+        ConcreteModel thirdConcreteModel = new ConcreteModel(3L, "Third Concrete Model");
+
+        cache.put(firstConcreteModel);
+        cache.put(secondConcreteModel);
+        cache.setCachingStrategy(secondaryCachingStrategy);
+        cache.put(thirdConcreteModel);
+
+        Mockito.verify(primaryCachingStrategy, times(1)).evict(any());
+        Mockito.verify(secondaryCachingStrategy, times(1)).evict(any());
+    }
+
+    @Test
+    public void getIdToCacheableMap_shouldReturnStorageMap_whenInvoked() {
+        Cache<ConcreteModel, Long> cache = new Cache<>(new ConcreteCachingStrategy<>(), 1, long.class);
+
+        Map<Long, Cacheable<ConcreteModel>> storageMap = cache.getIdToCacheableMap();
+
+        Assert.assertNotNull(storageMap);
+    }
+
     private static class ConcreteCachingStrategy<T, ID> implements CachingStrategy<T, ID> {
         @Override
         public void evict(Map<ID, Cacheable<T>> storageMap) {
