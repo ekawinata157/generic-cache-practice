@@ -1,6 +1,6 @@
 import interfaces.CachingStrategy;
 import model.Book;
-import model.Cache;
+import core.Cache;
 import org.junit.Assert;
 import strategy.LFUCachingStrategy;
 

@@ -1,9 +1,10 @@
-package model;
+package core;
 
 import annotation.CacheID;
 import interfaces.CachingStrategy;
 import lombok.Getter;
 import lombok.Setter;
+import model.Cacheable;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

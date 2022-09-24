@@ -1,16 +1,15 @@
 package model;
 
 import lombok.Getter;
-import lombok.Setter;
+
 
 import java.time.ZonedDateTime;
 
-@Setter
 @Getter
 public class Cacheable<T> {
-    private T cachedItem;
+    private final T cachedItem;
+    private final ZonedDateTime storedAt;
     private ZonedDateTime lastAccess;
-    private ZonedDateTime storedAt;
     private long accessedFrequency;
 
     public Cacheable(T cachedItem) {
