@@ -38,9 +38,9 @@ public class Cache<T, ID> {
 
     public T get(ID id) {
         if (idToCacheableMap.containsKey(id)) {
-            Cacheable<T> cachedItem = idToCacheableMap.get(id);
-            updateCachedItem(cachedItem);
-            return idToCacheableMap.get(id).getCachedItem();
+            Cacheable<T> cacheable = idToCacheableMap.get(id);
+            updateCachedItem(cacheable);
+            return cacheable.getCachedItem();
         }
         return null;
     }
