@@ -1,5 +1,6 @@
 package model;
 
+import annotation.CacheID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConcreteModel {
+    @CacheID
     private long id;
     private String name;
 

@@ -1,6 +1,8 @@
 package core;
 
 import annotation.CacheID;
+import exceptions.CacheKeyTypeMismatchException;
+import exceptions.UncacheableException;
 import interfaces.CachingStrategy;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,10 +58,10 @@ public class Cache<T, ID> {
                 .findFirst()
                 .orElse(null);
         if (idField == null) {
-            throw new RuntimeException("Cannot be cached!");
+            throw new UncacheableException(String.format("%s Cannot be cached!", t.getClass()));
         }
         if (!idField.getType().equals(this.idType)) {
-            throw new RuntimeException("Unsuitable ID type!");
+            throw new CacheKeyTypeMismatchException(String.format("Unsuitable ID type : %s expected: %s!", idField.getType(), this.idType));
         }
         idField.setAccessible(true);
         return (ID) idField.get(t);
